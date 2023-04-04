@@ -24,6 +24,7 @@ Este aplicativo foi desenvolvido utilizando as seguintes tecnologias:
 - React Native
 - Expo
 - JavaScript
+- Json Server
 - Git e Github
 - Figma
 

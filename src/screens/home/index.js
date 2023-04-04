@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import api from "../../services/api";
 
 import {
   View,
@@ -7,19 +8,30 @@ import {
   SafeAreaView,
   TextInput,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
 
 import { Logo } from "../../components/logo";
+import { FoodCard } from "../../components/foodcard";
 
 // Use SafeAreaView For Iphone Users
 
 export function Home() {
-  const [food, setFood] = useState("");
+  const [input, setInput] = useState("");
+  const [foods, setFoods] = useState([]);
 
-  function searchFood() {
-    console.log(food);
+  useEffect(() => {
+    async function fetchApi() {
+      await api.get("/foods").then(({ data }) => setFoods(data));
+    }
+
+    fetchApi();
+  }, []);
+
+  function searchinput() {
+    console.log(input);
   }
 
   return (
@@ -32,14 +44,21 @@ export function Home() {
         <TextInput
           placeholder="Digite o nome da comida"
           style={styles.input}
-          value={food}
-          onChangeText={(text) => setFood(text)}
+          value={input}
+          onChangeText={(text) => setInput(text)}
         />
 
-        <TouchableOpacity onPress={searchFood}>
+        <TouchableOpacity onPress={searchinput}>
           <Ionicons name="search" size={22} color={"rgba(70, 189, 106, 1)"} />
         </TouchableOpacity>
       </View>
+
+      <FlatList
+        data={foods}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={({ item }) => <FoodCard data={item} />}
+        showsVerticalScrollIndicator={false}
+      />
     </SafeAreaView>
   );
 }
