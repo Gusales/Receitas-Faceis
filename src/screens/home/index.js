@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import api from "../../services/api";
+import { useEffect, useState } from "react"
+import api from "../../services/api"
 
 import {
   View,
@@ -9,36 +9,79 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
-} from "react-native";
+} from "react-native"
 
-import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native"
 
-import { Logo } from "../../components/logo";
-import { FoodCard } from "../../components/foodcard";
+import { Ionicons } from "@expo/vector-icons"
+
+import { Text as MotiText } from "moti"
+
+import { Logo } from "../../components/logo"
+import { FoodCard } from "../../components/foodcard"
 
 // Use SafeAreaView For Iphone Users
 
 export function Home() {
-  const [input, setInput] = useState("");
-  const [foods, setFoods] = useState([]);
+  const [input, setInput] = useState("")
+  const [foods, setFoods] = useState([])
+
+  const navigation = useNavigation()
 
   useEffect(() => {
     async function fetchApi() {
-      await api.get("/foods").then(({ data }) => setFoods(data));
+      await api.get("/foods").then(({ data }) => setFoods(data))
     }
 
-    fetchApi();
-  }, []);
+    fetchApi()
+  }, [])
 
   function searchinput() {
-    console.log(input);
+    if (!input) return
+    let inputSearch = input
+    setInput("")
+    navigation.navigate("Search", { name: inputSearch })
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <Logo />
-      <Text style={styles.title}> Encontre a receita </Text>
-      <Text style={styles.title}> que combina com você </Text>
+      <MotiText
+        style={styles.title}
+        from={{
+          opacity: 0,
+          translateY: 15,
+        }}
+        animate={{
+          opacity: 1,
+          translateY: 0,
+        }}
+        transition={{
+          delay: 450,
+          type: "spring",
+          duration: 650,
+        }}
+      >
+        Encontre a receita
+      </MotiText>
+      <MotiText
+        style={styles.title}
+        from={{
+          opacity: 0,
+          translateY: 15,
+        }}
+        animate={{
+          opacity: 1,
+          translateY: 0,
+        }}
+        transition={{
+          delay: 450,
+          type: "spring",
+          duration: 650,
+        }}
+      >
+        que combina com você
+      </MotiText>
 
       <View style={styles.form}>
         <TextInput
@@ -60,7 +103,7 @@ export function Home() {
         showsVerticalScrollIndicator={false}
       />
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -98,4 +141,4 @@ const styles = StyleSheet.create({
     width: "90%",
     maxHeight: "90%",
   },
-});
+})
